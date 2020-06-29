@@ -1,0 +1,1 @@
+{"class":"org.apache.spark.ml.feature.OneHotEncoderModel","timestamp":1593106536772,"sparkVersion":"2.4.3","uid":"oneHotEncoder_2265408134a8","paramMap":{"outputCols":["odaIndexEncoded","ilIndexEncoded","ilceIndexEncoded"],"inputCols":["odaIndex","ilIndex","ilceIndex"]},"defaultParamMap":{"handleInvalid":"error","dropLast":true}}
