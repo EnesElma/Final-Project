@@ -28,7 +28,6 @@ object GBTFindMetrics {
     val Array(trainingData,testData) = df2.randomSplit(Array(0.9,0.1))
 
 
-
     val pipModel=PipelineModel.load("gbtRegression.modelPipelineFinal")
     val gbtdf=pipModel.transform(testData)
 
@@ -38,8 +37,8 @@ object GBTFindMetrics {
     shuffledDF.select("m2","oda","il","ilce","label","prediction").show(30)
 
     import org.apache.spark.ml.evaluation.RegressionEvaluator
-    //Root Mean Squared Error//Root Mean Squared Error
 
+    //Root Mean Squared Error
     val evaluatorRMSE = new RegressionEvaluator().setLabelCol("label").setPredictionCol("prediction").setMetricName("rmse")
     val rmse = evaluatorRMSE.evaluate(gbtdf)
 
@@ -60,10 +59,5 @@ object GBTFindMetrics {
     println("Mean squared error(MSE) = " + mse)
     println("Mean absolute error(MAE)= " + mae)
 
-    /*
-    Sonuçlar:
-    R-sqr on test data = 0.6303795787763278
-    Time taken to run the above cell: 11295 seconds.
-     */
   }
 }

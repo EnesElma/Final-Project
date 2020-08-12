@@ -37,10 +37,8 @@ public class PricePrediction extends JFrame {
         Logger.getLogger("org").setLevel(Level.ERROR);
         LogManager.getLogManager().reset();
         final SparkSession spark = SparkSession.builder().appName("Prediction").master("local").getOrCreate();
-        System.out.println("Spark app yüklendi");
         spark.sparkContext().setLogLevel("ERROR");
         final PipelineModel pipelineModel=PipelineModel.load("gbtRegression.modelPipelineFinal");
-        System.out.println("Model yüklendi");
 
 
         comboBox1.addItem("1+1");

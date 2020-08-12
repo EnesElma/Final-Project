@@ -77,7 +77,7 @@ object GBTPipeline {
       .setOutputCol("features")
 
 
-    //train ve test data ayırma
+    //train and test data split
     val Array(trainingData, testData) = df2.randomSplit(Array(0.9,0.1),1234)
 
     val starttime = Calendar.getInstance().getTime()
@@ -89,7 +89,7 @@ object GBTPipeline {
       .setMaxBins(50)
 
 
-    //Pipeline Model oluşturma
+    //Pipeline Model
     val pipelineObj=new Pipeline()
       .setStages(Array(odaStrIndexer,ilStrIndexer,ilceStrIndexer,encoder,vectorAssembler,standardScaler,normalizer,gbtRegressionObj))
 
@@ -122,7 +122,6 @@ object GBTPipeline {
 
 
     /*
-    Sonuçlar:
     R-sqr on test data = 0.6303795787763278
     Time taken to run the above cell: 11295 seconds.
      */

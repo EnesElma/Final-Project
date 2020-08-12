@@ -12,8 +12,7 @@ object DataClean {
       .appName("SahibindenProject")
       .master("local")
       .getOrCreate()
-
-
+    import spark.implicits._
 
     val myDF=spark.read.format("csv")
       .option("header",true)
@@ -22,7 +21,6 @@ object DataClean {
       .load("D:\\sahibinden_records/sahibinden_dirty_data.csv")
 
 
-    import spark.implicits._
     /*
         val x= myDF.groupBy($"binaYasi")
           .agg(count($"*").as("sayi"))
@@ -38,20 +36,20 @@ object DataClean {
         val myDF6=myDF5.filter($"metreKare".lt(500))
     */
 
-    //id kolonu silindi:
+    //Delete id column:
     val myDF2=myDF.drop("_id")
 
 
-    // text boşluklarını temizle:
+    //delete text space with trim
     val myDF3 = myDF2
       .withColumn("oda", trim(($"oda")))
       .withColumn("il", trim(($"il")))
       .withColumn("ilce", trim(($"ilce")))
 
 
-    //null olan veriler silindi:
+    //drop the not available line
     val myDF4=myDF3.na.drop()       //na = not available
-    /*  Veya:
+    /*  or:
     val myDF4 = myDF3.filter($"fiyat".isNotNull)
       .filter($"oda".isNotNull)
       .filter($"metreKare".isNotNull)
@@ -60,10 +58,7 @@ object DataClean {
      */
 
 
-
-
-
-    //Oda kategorileri birleştirme(merged):
+    //merge the close category
     val myDF5=myDF4
       .withColumn("oda",
         when(col("oda").isin("1+1","1.5+1"),"1+1")
@@ -82,15 +77,11 @@ object DataClean {
 
     x.show(x.count.toInt)
 
-
-    //metreKare de ki tutarsız verilerin düzenlenmesi ve birleştirme(merged):
     val myDF6=myDF5
       .filter(col("fiyat").lt(2000001))
 
-    myDF6.describe().show()
 
-
-    //il,ilçe ve mahalle kolonlarını küçük harf yapma:
+    //make lower case
     val myDF7=myDF6
       .withColumn("il",lower($"il"))
       .withColumn("ilce",lower($"ilce"))
@@ -125,9 +116,9 @@ object DataClean {
     ilce.show(ilce.count.toInt)
 
 
-    //yeni dataframe diske kaydetme:
+    //save dataframe to disc:
     new_df
-      .coalesce(1)         // tek parça olması için
+      .coalesce(1)         // for one piece
       .write
       .mode("Overwrite")
       .option("sep",",")
